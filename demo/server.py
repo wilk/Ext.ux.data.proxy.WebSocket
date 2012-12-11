@@ -8,11 +8,22 @@ import sys
 
 class EchoWebSocket (websocket.WebSocketHandler):
 	def open (self):
-		print 'WebSocket opened!'
-		self.write_message (json.dumps ({'id':'0','name':'foo','age':32}));
+		print 'WebSocket open!'
 	
 	def on_message (self, message):
 #		self.write_message (message)
+		if message == 'create':
+			self.write_message ('create')
+		elif message == 'read':
+			msg = {"event": "read" ,"data": {"user": {"id": 10 ,"name": "Lollo" ,"age": 20}}}
+			self.write_message (msg)
+		elif message == 'update':
+#			msg = {"event": "update" ,"data": {"user": {"id": 10 ,"name": "Lolloz" ,"age": 20}}}
+#			self.write_message (msg)
+			self.write_message ('update')
+		elif message == 'destroy':
+			msg = {"event": "destroy" ,"data": {"user": {"id": 10 ,"name": "Lollo" ,"age": 20}}}
+			self.write_message ('destroy')
 		print 'He sais: ' + message
 	
 	def on_close (self):

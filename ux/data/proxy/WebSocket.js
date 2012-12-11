@@ -28,8 +28,9 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 		}
 		else me.ws = cfg.websocket;
 		
+		// TODO: handle incoming data
 		me.ws.on (me.api.create, function (ws, data) {
-//			me.callbacks[action] (data);
+			me.completeTask ('create');
 		});
 		
 		me.ws.on (me.api.read, function (ws, data) {
@@ -44,60 +45,60 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 			
 			delete me.callbacks[me.api.read];
 			
-			// TODO: keep it?
-			me.fireEvent ('metachange', resultSet.records);
-			
 			// Call the store callback
 			Ext.callback (fun.callback, fun.scope, [opt]);
 		});
 		
+		// TODO: handle incoming data
 		me.ws.on (me.api.update, function (ws, data) {
-			var resultSet = me.reader.read (data) ,
-			    fun = me.callbacks[me.api.read] ,
-			    opt = Ext.create ('Ext.data.Operation', {
-			    	resultSet: resultSet ,
-				records: resultSet.records ,
-				success: resultSet.success,
-				complete: true
-			    });
-			
-			delete me.callbacks[me.api.read];
-			
-			// TODO: keep it?
-			me.fireEvent ('metachange', resultSet.records);
-			
-			Ext.callback (fun.callback, fun.scope, [opt]);
+			me.completeTask ('update');
 		});
 		
+		// TODO: handle incoming data
 		me.ws.on (me.api.destroy, function (ws, data) {
+			me.completeTask ('destroy');
 		});
 	} ,
 	
 	create: function (operation, callback, scope) {
-		this.runAction (this.api.create, operation, callback, scope);
+		this.runTask (this.api.create, operation, callback, scope);
 	} ,
 	
 	read: function (operation, callback, scope) {
-		this.runAction (this.api.read, operation, callback, scope);
+		this.runTask (this.api.read, operation, callback, scope);
 	} ,
 	
 	update: function (operation, callback, scope) {
-		this.runAction (this.api.update, operation, callback, scope);
+		this.runTask (this.api.update, operation, callback, scope);
 	} ,
 	
 	destroy: function (operation, callback, scope) {
-		this.runAction (this.api.destroy, operation, callback, scope);
+		this.runTask (this.api.destroy, operation, callback, scope);
 	} ,
 	
-	runAction: function (action, operation, callback, scope) {
+	runTask: function (action, operation, callback, scope) {
 		var me = this;
 		
 		// Callbacks store
 		me.callbacks[action] = {
+			operation: operation ,
 			callback: callback ,
 			scope: scope
 		};
 		
 		me.ws.send (action);
+	} ,
+	
+	completeTask: function (action) {
+		var me = this ,
+		    fun = me.callbacks[action];
+			
+		delete me.callbacks[action];
+	
+		fun.operation.commitRecords (fun.operation.records);
+		fun.operation.setCompleted ();
+		fun.operation.setSuccessful ();
+	
+		Ext.callback (fun.callback, fun.scope, [fun.operation]);
 	}
 });
