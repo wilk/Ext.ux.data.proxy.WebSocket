@@ -1,8 +1,16 @@
+/**
+ * @class Ext.ux.data.proxy.WebSocket
+ * @author Vincenzo Ferrari <wilk3ert@gmail.com>
+ *
+ * HTML5 WebSocket proxy
+ */
 Ext.define ('Ext.ux.data.proxy.WebSocket', {
 	extend: 'Ext.data.proxy.Proxy' ,
 	alias: 'proxy.websocket' ,
 	
 	require: ['Ext.ux.WebSocket'] ,
+	
+	callbacks: {} ,
 	
 	config: {
 		api: {
@@ -10,8 +18,7 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 			read: 'read' ,
 			update: 'update' ,
 			destroy: 'destroy'
-		} ,
-		callbacks: {}
+		}
 	} ,
 	
 	constructor: function (cfg) {
@@ -86,7 +93,17 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 			scope: scope
 		};
 		
-		me.ws.send (action);
+		// Treats 'read' as a string event, with no data inside
+		if (action == me.api.read) me.ws.send (action);
+		else {
+			var data = [];
+			
+			Ext.each (operation.records, function (record) {
+				data.push (record.data);
+			});
+			
+			me.ws.send (action, data);
+		}
 	} ,
 	
 	completeTask: function (action) {
