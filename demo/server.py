@@ -12,18 +12,16 @@ class EchoWebSocket (websocket.WebSocketHandler):
 	
 	def on_message (self, message):
 		print 'He sais: ' + message
-		if message == 'read':
+		message = json.loads (message)
+		if message['event'] == 'create':
+			self.write_message ({'event':'create'})
+		elif message['event'] == 'read':
 			msg = {"event": "read" ,"data": {"user": {"id": 10 ,"name": "Lollo" ,"age": 20}}}
 			self.write_message (msg)
-		else:
-			message = json.loads (message)
-			if message['event'] == 'create':
-				self.write_message ('create')
-			elif message['event'] == 'update':
-				self.write_message ('update')
-			elif message['event'] == 'destroy':
-				msg = {"event": "destroy" ,"data": {"user": {"id": 10 ,"name": "Lollo" ,"age": 20}}}
-				self.write_message ('destroy')
+		elif message['event'] == 'update':
+			self.write_message ({'event':'update'})
+		elif message['event'] == 'destroy':
+			self.write_message ({'event':'destroy'})
 	
 	def on_close (self):
 		print 'WebSocket closed'

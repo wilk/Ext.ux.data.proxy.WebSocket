@@ -18,7 +18,11 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 			read: 'read' ,
 			update: 'update' ,
 			destroy: 'destroy'
-		}
+		} ,
+		
+		url: '' ,
+		protocol: null ,
+		communicationType: 'event'
 	} ,
 	
 	constructor: function (cfg) {
@@ -29,17 +33,20 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 		
 		if (Ext.isEmpty (cfg.websocket)) {
 			me.ws = Ext.create ('Ext.ux.WebSocket', {
-				url: cfg.url ,
-				protocol: cfg.protocol
+				url: me.url ,
+				protocol: me.protocol ,
+				communicationType: me.communicationType
 			});
 		}
-		else me.ws = cfg.websocket;
+		else me.ws = me.websocket;
 		
 		// TODO: handle incoming data
+		// TODO: handle success and failure
 		me.ws.on (me.api.create, function (ws, data) {
-			me.completeTask ('create');
+			me.completeTask (me.api.create);
 		});
 		
+		// TODO: handle success and failure
 		me.ws.on (me.api.read, function (ws, data) {
 			var resultSet = me.reader.read (data) ,
 			    fun = me.callbacks[me.api.read] ,
@@ -57,13 +64,15 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 		});
 		
 		// TODO: handle incoming data
+		// TODO: handle success and failure
 		me.ws.on (me.api.update, function (ws, data) {
-			me.completeTask ('update');
+			me.completeTask (me.api.update);
 		});
 		
 		// TODO: handle incoming data
+		// TODO: handle success and failure
 		me.ws.on (me.api.destroy, function (ws, data) {
-			me.completeTask ('destroy');
+			me.completeTask (me.api.destroy);
 		});
 	} ,
 	
@@ -98,9 +107,9 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 		else {
 			var data = [];
 			
-			Ext.each (operation.records, function (record) {
-				data.push (record.data);
-			});
+			for (var i=0; i<operation.records.length; i++) {
+				data.push (operation.records[i].data);
+			}
 			
 			me.ws.send (action, data);
 		}
