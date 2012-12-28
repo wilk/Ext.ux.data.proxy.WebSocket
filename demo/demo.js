@@ -72,13 +72,24 @@ Ext.onReady (function () {
 				text: 'Read' ,
 				icon: 'images/arrow-circle.png' ,
 				handler: function (btn) {
-					store.load ();
+					store.load (function (records, operation, success) {
+						console.log (records);
+					});
 				}
 			} , '-' , {
 				text: 'Update' ,
 				icon: 'images/disk--pencil.png' ,
 				handler: function (btn) {
-					store.sync ();
+					store.sync ({
+						success: function (records) {
+							console.log ('success');
+							console.log (records);
+						} ,
+						failure: function (act) {
+							console.log ('failure');
+							console.log (act);
+						}
+					});
 				}
 			} , '-' , {
 				text: 'Destroy' ,

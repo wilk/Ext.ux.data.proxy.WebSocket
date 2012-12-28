@@ -50,17 +50,18 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 		me.ws.on (me.api.read, function (ws, data) {
 			var resultSet = me.reader.read (data) ,
 			    fun = me.callbacks[me.api.read] ,
-			    opt = Ext.create ('Ext.data.Operation', {
-			    	resultSet: resultSet ,
-				records: resultSet.records ,
-				success: resultSet.success,
-				complete: true
-			    });
+			    opt = fun.operation;
 			
 			delete me.callbacks[me.api.read];
 			
+			opt.resultSet = resultSet;
+			opt.records = resultSet.records;
+			opt.success = resultSet.success;
+			opt.complete = true;
+			opt.scope = fun.scope;
+			
 			// Call the store callback
-			Ext.callback (fun.callback, fun.scope, [opt]);
+			fun.callback.apply (fun.scope, [opt]);
 		});
 		
 		// TODO: handle incoming data
@@ -95,6 +96,8 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 	runTask: function (action, operation, callback, scope) {
 		var me = this;
 		
+		scope = scope || me;
+		
 		// Callbacks store
 		me.callbacks[action] = {
 			operation: operation ,
@@ -117,14 +120,15 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 	
 	completeTask: function (action) {
 		var me = this ,
-		    fun = me.callbacks[action];
+		    fun = me.callbacks[action] ,
+		    opt = fun.operation;
 			
 		delete me.callbacks[action];
 	
-		fun.operation.commitRecords (fun.operation.records);
-		fun.operation.setCompleted ();
-		fun.operation.setSuccessful ();
-	
-		Ext.callback (fun.callback, fun.scope, [fun.operation]);
+		opt.commitRecords (opt.records);
+		opt.setCompleted ();
+		opt.setSuccessful ();
+		
+		fun.callback.apply (fun.scope, [opt]);
 	}
 });
