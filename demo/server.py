@@ -3,28 +3,76 @@
 from tornado import websocket
 from tornado import web
 from tornado import ioloop
+import string
+import random
 import json
 import sys
+
+sockets = []
+
+def broadcast (msg):
+	for socket in sockets:
+		socket.write_message (msg)
 
 class EchoWebSocket (websocket.WebSocketHandler):
 	def open (self):
 		print 'WebSocket open!'
+		sockets.append (self)
+	
+	def id_generator (self, size=5, chars=string.ascii_uppercase + string.digits + string.ascii_lowercase):
+		return ''.join (random.choice (chars) for x in range (size))
 	
 	def on_message (self, message):
 		print 'He sais: ' + message
 		message = json.loads (message)
+		
 		if message['event'] == 'create':
-			self.write_message ({'event':'create'})
+			with open ('Users.json', 'r') as f:
+				users = f.read ()
+			users = json.loads (users)
+			for d in message['data']:
+				d['id'] = self.id_generator ()
+				users.append (d)
+			with open ('Users.json', 'w') as f:
+				f.write (json.dumps (users, indent=5))
+			broadcast ({'event':'create', 'data': message['data']})
+#			self.write_message ({'event':'create'})
+		
 		elif message['event'] == 'read':
-			msg = {"event": "read" ,"data": {"user": {"id": 10 ,"name": "Lollo" ,"age": 20}}}
+			with open ('Users.json', 'r') as f:
+				users = f.read ()
+				users = json.loads (users)
+			msg = {"event": "read", "data": users}
+#			broadcast (msg)
 			self.write_message (msg)
+		
 		elif message['event'] == 'update':
-			self.write_message ({'event':'update'})
+			with open ('Users.json', 'r') as f:
+				users = f.read ()
+			users = json.loads (users)
+			for u in message['data']:
+				users = [u if user['id'] == u['id'] else user for user in users]
+			with open ('Users.json', 'w') as f:
+				f.write (json.dumps (users, indent=5))
+			broadcast ({'event':'update', 'data': message['data']})
+#			self.write_message ({'event':'update'})
+		
 		elif message['event'] == 'destroy':
-			self.write_message ({'event':'destroy'})
+			with open ('Users.json', 'r') as f:
+				users = f.read ()
+			users = json.loads (users)
+			for user in users:
+				if user['id'] == message['data'][0]['id']:
+					users.remove (user)
+					break
+			with open ('Users.json', 'w') as f:
+				f.write (json.dumps (users, skipkeys=True, indent=5))
+			broadcast ({'event':'destroy', 'data': message['data']})
+#			self.write_message ({'event':'destroy'})
 	
 	def on_close (self):
 		print 'WebSocket closed'
+		sockets.remove (self)
 
 if __name__ == '__main__':
 	if (len (sys.argv) <= 1):

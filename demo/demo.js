@@ -10,21 +10,21 @@ Ext.onReady (function () {
 		fields: ['id', 'name', 'age'] ,
 		proxy: {
 			type: 'websocket' ,
+			storeId: 'myStore',
 			url: 'ws://localhost:8888' ,
 			reader: {
 				type: 'json' ,
-				record: 'user'
-			} ,
-			writer: {
-				type: 'json' ,
-				record: 'user'
+				root: 'user'
 			}
 		}
 	});
 	
 	var store = Ext.create ('Ext.data.Store', {
-		model: 'model'
+		model: 'model',
+		storeId: 'myStore'
 	});
+	
+	//store.proxy.store = store;
 	
 	var grid = Ext.create ('Ext.grid.Panel', {
 		renderTo: Ext.getBody () ,
@@ -33,17 +33,18 @@ Ext.onReady (function () {
 		height: 300 ,
 		store: store ,
 		
-		selType: 'cellmodel' ,
+		selType: 'rowmodel' ,
+		selModel: 'rowmodel' ,
 		plugins: [Ext.create ('Ext.grid.plugin.CellEditing', {
 			clicksToEdit: 1
 		})] ,
 		
 		columns: [{
+			xtype: 'rownumberer'
+		} , {
 			text: 'ID' ,
 			dataIndex: 'id' ,
-			editor: {
-				xtype: 'textfield'
-			}
+			hidden: true
 		} , {
 			text: 'Name' ,
 			dataIndex: 'name' ,
@@ -73,7 +74,7 @@ Ext.onReady (function () {
 				icon: 'images/arrow-circle.png' ,
 				handler: function (btn) {
 					store.load (function (records, operation, success) {
-						console.log (records);
+//						console.log (records);
 					});
 				}
 			} , '-' , {
@@ -81,13 +82,8 @@ Ext.onReady (function () {
 				icon: 'images/disk--pencil.png' ,
 				handler: function (btn) {
 					store.sync ({
-						success: function (records) {
-							console.log ('success');
-							console.log (records);
-						} ,
-						failure: function (act) {
-							console.log ('failure');
-							console.log (act);
+						success: function () {
+							store.load ();
 						}
 					});
 				}
@@ -99,5 +95,31 @@ Ext.onReady (function () {
 				}
 			}]
 		}
+	});
+	
+	var chart = Ext.create ('Ext.chart.Chart', {
+		renderTo: Ext.getBody () ,
+		title: 'WebSocketed Chart' ,
+		width: 300 ,
+		height: 300 ,
+		store: store ,
+		
+		axes: [{
+			type: 'Category' ,
+			position: 'bottom' ,
+			fields: ['name']
+		} , {
+			type: 'Numeric' ,
+			position: 'left' ,
+			minimum: 0 ,
+			fields: ['age']
+		}] ,
+		
+		series: [{
+			type: 'column' ,
+			axis: 'left' ,
+			xField: 'name' ,
+			yField: 'age'
+		}]
 	});
 });
