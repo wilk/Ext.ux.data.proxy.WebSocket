@@ -16,7 +16,7 @@ Ext.Loader.setConfig ({
 Ext.require (['Ext.ux.data.proxy.WebSocket']);
 ```
 
-Now, you are ready to use them in your code!
+Now, you are ready to use it in your code!
 
 First define a new `Ext.data.Model`:
 
@@ -46,6 +46,48 @@ var store = Ext.create ('Ext.data.Store', {
 });
 ```
 
+Third attach the store to a grid or a chart:
+
+```javascript
+var myGrid = Ext.create ('Ext.grid.Panel', {
+	title: 'My Grid' ,
+	store: store ,
+	...
+});
+
+var myGrid = Ext.create ('Ext.chart.Chart', {
+	title: 'My Chart' ,
+	store: store ,
+	...
+});
+```
+
+In the above example, a WebSocket proxy is defined into the model (the same thing can be done into stores): when a CRUD operation is made by its store (through sync/load methods), a 'create'/'read'/'update'/'destroy' event is sent to the server.
+At this point, the server intercepts the event, parses the request, and then replies back with the same event.
+If you want/need to specify your communication protocol (you wanna CRUD operations like 'createUsers','readUsers','updateUsers','destroyUsers'), just use the api configuration:
+
+```javascript
+proxy: {
+	type: 'websocket' ,
+	storeId: 'myStore',
+	url: 'ws://localhost:8888' ,
+	api: {
+		create:  'createUsers' ,
+		read:    'readUsers' ,
+		update:  'updateUsers' ,
+		destroy: 'destroyUsers'
+	} ,
+	reader: {
+		type: 'json' ,
+		root: 'user'
+	}
+}
+```
+
+With this configuration, each sync/load operation made by the store will fire the right CRUD-overridden action.
+
+Now, you're ready to watch the magic in action!
+
 ## Run the demo
 **I suggest to use [**virtualenv**](http://www.virtualenv.org) to test the demo.**
 
@@ -71,7 +113,7 @@ $ . venv/bin/activate
 Finally, start the server:
 
 ```bash
-(venv)$ python /var/www/Ext.ux.data.proxy.WebSocket/demo/server.py 8888 9999 10000
+(venv)$ cd /var/www/Ext.ux.data.proxy.WebSocket/demo/ && python server.py 8888 9999 10000
 ```
 
 Now, you have three websockets listening at 8888, 9999 and 10000 port on the server side!
