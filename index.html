@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Ext.ux.data.proxy.websocket by wilk</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Ext.ux.data.proxy.websocket</h1>
+        <p class="header">An easy-to-use implementation of the ExtJS/Sencha Touch proxy, using HTML5 WebSocket.</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/wilk/Ext.ux.data.proxy.WebSocket/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/wilk/Ext.ux.data.proxy.WebSocket/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/wilk/Ext.ux.data.proxy.WebSocket">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/wilk">wilk</a></p>
+
+
+      </header>
+      <section>
+        <h1>Ext.ux.data.proxy.WebSocket</h1>
+
+<p>ExtJS-WebSocket is an easy-to-use implementation of the ExtJS/Sencha Touch proxy, using <a href="https://github.com/wilk/ExtJS-WebSocket"><strong>Ext.ux.WebSocket</strong></a> (a HTML5 WebSocket wrapper built for ExtJS and Sencha Touch).</p>
+
+<h2>Requirements</h2>
+
+<ul>
+<li><a href="https://github.com/wilk/ExtJS-WebSocket"><code>Ext.ux.WebSocket</code></a></li>
+</ul><h2>Usage</h2>
+
+<p>Load <code>Ext.ux.data.proxy.WebSocket</code> via <code>Ext.require</code>:</p>
+
+<div class="highlight"><pre><span class="nx">Ext</span><span class="p">.</span><span class="nx">Loader</span><span class="p">.</span><span class="nx">setConfig</span> <span class="p">({</span>
+    <span class="nx">enabled</span><span class="o">:</span> <span class="kc">true</span>
+<span class="p">});</span>
+
+<span class="nx">Ext</span><span class="p">.</span><span class="nx">require</span> <span class="p">([</span><span class="s1">'Ext.ux.data.proxy.WebSocket'</span><span class="p">]);</span>
+</pre></div>
+
+<p>Now, you are ready to use them in your code!</p>
+
+<p>First define a new <code>Ext.data.Model</code>:</p>
+
+<div class="highlight"><pre><span class="nx">Ext</span><span class="p">.</span><span class="nx">define</span> <span class="p">(</span><span class="s1">'myModel'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">extend</span><span class="o">:</span> <span class="s1">'Ext.data.Model'</span> <span class="p">,</span>
+    <span class="nx">fields</span><span class="o">:</span> <span class="p">[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'name'</span><span class="p">,</span> <span class="s1">'age'</span><span class="p">]</span> <span class="p">,</span>
+    <span class="c1">// Ext.ux.data.proxy.WebSocket can be put here in the model or in the store</span>
+    <span class="nx">proxy</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">'websocket'</span> <span class="p">,</span>
+        <span class="nx">storeId</span><span class="o">:</span> <span class="s1">'myStore'</span><span class="p">,</span>
+        <span class="nx">url</span><span class="o">:</span> <span class="s1">'ws://localhost:8888'</span> <span class="p">,</span>
+        <span class="nx">reader</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">type</span><span class="o">:</span> <span class="s1">'json'</span> <span class="p">,</span>
+            <span class="nx">root</span><span class="o">:</span> <span class="s1">'user'</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>Second create a <code>Ext.data.Store</code>:</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">store</span> <span class="o">=</span> <span class="nx">Ext</span><span class="p">.</span><span class="nx">create</span> <span class="p">(</span><span class="s1">'Ext.data.Store'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">model</span><span class="o">:</span> <span class="s1">'myModel'</span><span class="p">,</span>
+    <span class="nx">storeId</span><span class="o">:</span> <span class="s1">'myStore'</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>Run the demo</h2>
+
+<p><strong>I suggest to use <a href="http://www.virtualenv.org"><strong>virtualenv</strong></a> to test the demo.</strong></p>
+
+<p>First of all, you need <a href="http://www.virtualenv.org"><strong>virtualenv</strong></a>:</p>
+
+<div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install virtualenv
+</pre></div>
+
+<p>Then, make a virtual environment:</p>
+
+<div class="highlight"><pre><span class="nv">$ </span>virtualenv venv
+</pre></div>
+
+<p>And install <code>Tornado</code>:</p>
+
+<div class="highlight"><pre><span class="nv">$ </span>. venv/bin/activate
+<span class="o">(</span>venv<span class="o">)</span><span class="nv">$ </span>pip install tornado
+</pre></div>
+
+<p>Finally, start the server:</p>
+
+<div class="highlight"><pre><span class="o">(</span>venv<span class="o">)</span><span class="nv">$ </span>python /var/www/Ext.ux.data.proxy.WebSocket/demo/server.py 8888 9999 10000
+</pre></div>
+
+<p>Now, you have three websockets listening at 8888, 9999 and 10000 port on the server side!
+Then, type in the address bar of your browser: <strong>http://localhost/Ext.ux.data.proxy.WebSocket/demo</strong> and play the demo ;)</p>
+
+<h2>Documentation</h2>
+
+<p>You can build the documentation (like ExtJS/Sencha Touch Docs) with <a href="https://github.com/senchalabs/jsduck"><strong>jsduck</strong></a>:</p>
+
+<div class="highlight"><pre><span class="nv">$ </span>jsduck ux --output /var/www/docs
+</pre></div>
+
+<p>It will make the documentation into docs dir and it will be visible at: http://localhost/docs</p>
+
+<h2>License</h2>
+
+<p>The MIT License (MIT)</p>
+
+<p>Copyright (c) 2013 Vincenzo Ferrari <a href="mailto:wilk3ert@gmail.com">wilk3ert@gmail.com</a></p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
