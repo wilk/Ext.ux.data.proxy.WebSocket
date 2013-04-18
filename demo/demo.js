@@ -29,7 +29,7 @@ Ext.onReady (function () {
 	var grid = Ext.create ('Ext.grid.Panel', {
 		renderTo: Ext.getBody () ,
 		title: 'WebSocketed Grid' ,
-		width: 300 ,
+		width: 500 ,
 		height: 300 ,
 		store: store ,
 		
@@ -100,7 +100,7 @@ Ext.onReady (function () {
 	var chart = Ext.create ('Ext.chart.Chart', {
 		renderTo: Ext.getBody () ,
 		title: 'WebSocketed Chart' ,
-		width: 300 ,
+		width: 500 ,
 		height: 300 ,
 		store: store ,
 		
