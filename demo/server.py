@@ -18,6 +18,11 @@ class EchoWebSocket (websocket.WebSocketHandler):
 	def open (self):
 		print 'WebSocket open!'
 		sockets.append (self)
+		with open ('Users.json', 'r') as f:
+			users = f.read ()
+		users = json.loads (users)
+		msg = {"event": "read", "data": users}
+		self.write_message (msg)
 	
 	def id_generator (self, size=5, chars=string.ascii_uppercase + string.digits + string.ascii_lowercase):
 		return ''.join (random.choice (chars) for x in range (size))
@@ -36,14 +41,12 @@ class EchoWebSocket (websocket.WebSocketHandler):
 			with open ('Users.json', 'w') as f:
 				f.write (json.dumps (users, indent=5))
 			broadcast ({'event':'create', 'data': message['data']})
-#			self.write_message ({'event':'create'})
 		
 		elif message['event'] == 'read':
 			with open ('Users.json', 'r') as f:
 				users = f.read ()
 				users = json.loads (users)
 			msg = {"event": "read", "data": users}
-#			broadcast (msg)
 			self.write_message (msg)
 		
 		elif message['event'] == 'update':
@@ -55,7 +58,6 @@ class EchoWebSocket (websocket.WebSocketHandler):
 			with open ('Users.json', 'w') as f:
 				f.write (json.dumps (users, indent=5))
 			broadcast ({'event':'update', 'data': message['data']})
-#			self.write_message ({'event':'update'})
 		
 		elif message['event'] == 'destroy':
 			with open ('Users.json', 'r') as f:
@@ -68,7 +70,6 @@ class EchoWebSocket (websocket.WebSocketHandler):
 			with open ('Users.json', 'w') as f:
 				f.write (json.dumps (users, skipkeys=True, indent=5))
 			broadcast ({'event':'destroy', 'data': message['data']})
-#			self.write_message ({'event':'destroy'})
 	
 	def on_close (self):
 		print 'WebSocket closed'
