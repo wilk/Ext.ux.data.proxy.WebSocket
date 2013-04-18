@@ -1,44 +1,36 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Ext.ux.data.proxy.websocket by wilk</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/main.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Ext.ux.data.proxy.websocket : An easy-to-use implementation of the ExtJS/Sencha Touch proxy, using HTML5 WebSocket." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Ext.ux.data.proxy.websocket</title>
   </head>
+
   <body>
 
-      <header>
-        <h1>Ext.ux.data.proxy.websocket</h1>
-        <p>An easy-to-use implementation of the ExtJS/Sencha Touch proxy, using HTML5 WebSocket.</p>
-      </header>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/wilk/Ext.ux.data.proxy.WebSocket">View on GitHub</a>
 
-      <div id="banner">
-        <span id="logo"></span>
+          <h1 id="project_title">Ext.ux.data.proxy.websocket</h1>
+          <h2 id="project_tagline">An easy-to-use implementation of the ExtJS/Sencha Touch proxy, using HTML5 WebSocket.</h2>
 
-        <a href="https://github.com/wilk/Ext.ux.data.proxy.WebSocket" class="button fork"><strong>View On GitHub</strong></a>
-        <div class="downloads">
-          <span>Downloads:</span>
-          <ul>
-            <li><a href="https://github.com/wilk/Ext.ux.data.proxy.WebSocket/zipball/master" class="button">ZIP</a></li>
-            <li><a href="https://github.com/wilk/Ext.ux.data.proxy.WebSocket/tarball/master" class="button">TAR</a></li>
-          </ul>
-        </div>
-      </div><!-- end banner -->
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/wilk/Ext.ux.data.proxy.WebSocket/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/wilk/Ext.ux.data.proxy.WebSocket/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
 
-    <div class="wrapper">
-      <nav>
-        <ul></ul>
-      </nav>
-      <section>
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
         <h1>Ext.ux.data.proxy.WebSocket</h1>
 
 <p>ExtJS-WebSocket is an easy-to-use implementation of the ExtJS/Sencha Touch proxy, using <a href="https://github.com/wilk/ExtJS-WebSocket"><strong>Ext.ux.WebSocket</strong></a> (a HTML5 WebSocket wrapper built for ExtJS and Sencha Touch).</p>
@@ -58,7 +50,7 @@
 <span class="nx">Ext</span><span class="p">.</span><span class="nx">require</span> <span class="p">([</span><span class="s1">'Ext.ux.data.proxy.WebSocket'</span><span class="p">]);</span>
 </pre></div>
 
-<p>Now, you are ready to use them in your code!</p>
+<p>Now, you are ready to use it in your code!</p>
 
 <p>First define a new <code>Ext.data.Model</code>:</p>
 
@@ -86,6 +78,46 @@
 <span class="p">});</span>
 </pre></div>
 
+<p>Third attach the store to a grid or a chart:</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">myGrid</span> <span class="o">=</span> <span class="nx">Ext</span><span class="p">.</span><span class="nx">create</span> <span class="p">(</span><span class="s1">'Ext.grid.Panel'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">title</span><span class="o">:</span> <span class="s1">'My Grid'</span> <span class="p">,</span>
+    <span class="nx">store</span><span class="o">:</span> <span class="nx">store</span> <span class="p">,</span>
+    <span class="p">...</span>
+<span class="p">});</span>
+
+<span class="kd">var</span> <span class="nx">myGrid</span> <span class="o">=</span> <span class="nx">Ext</span><span class="p">.</span><span class="nx">create</span> <span class="p">(</span><span class="s1">'Ext.chart.Chart'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">title</span><span class="o">:</span> <span class="s1">'My Chart'</span> <span class="p">,</span>
+    <span class="nx">store</span><span class="o">:</span> <span class="nx">store</span> <span class="p">,</span>
+    <span class="p">...</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>In the above example, a WebSocket proxy is defined into the model (the same thing can be done into stores): when a CRUD operation is made by its store (through sync/load methods), a 'create'/'read'/'update'/'destroy' event is sent to the server.
+At this point, the server intercepts the event, parses the request, and then replies back with the same event.
+If you want/need to specify your communication protocol (you wanna CRUD operations like 'createUsers','readUsers','updateUsers','destroyUsers'), just use the api configuration:</p>
+
+<div class="highlight"><pre><span class="nx">proxy</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s1">'websocket'</span> <span class="p">,</span>
+    <span class="nx">storeId</span><span class="o">:</span> <span class="s1">'myStore'</span><span class="p">,</span>
+    <span class="nx">url</span><span class="o">:</span> <span class="s1">'ws://localhost:8888'</span> <span class="p">,</span>
+    <span class="nx">api</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">create</span><span class="o">:</span>  <span class="s1">'createUsers'</span> <span class="p">,</span>
+        <span class="nx">read</span><span class="o">:</span>    <span class="s1">'readUsers'</span> <span class="p">,</span>
+        <span class="nx">update</span><span class="o">:</span>  <span class="s1">'updateUsers'</span> <span class="p">,</span>
+        <span class="nx">destroy</span><span class="o">:</span> <span class="s1">'destroyUsers'</span>
+    <span class="p">}</span> <span class="p">,</span>
+    <span class="nx">reader</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">'json'</span> <span class="p">,</span>
+        <span class="nx">root</span><span class="o">:</span> <span class="s1">'user'</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>With this configuration, each sync/load operation made by the store will fire the right CRUD-overridden action.</p>
+
+<p>Now, you're ready to watch the magic in action!</p>
+
 <h2>Run the demo</h2>
 
 <p><strong>I suggest to use <a href="http://www.virtualenv.org"><strong>virtualenv</strong></a> to test the demo.</strong></p>
@@ -108,7 +140,7 @@
 
 <p>Finally, start the server:</p>
 
-<div class="highlight"><pre><span class="o">(</span>venv<span class="o">)</span><span class="nv">$ </span>python /var/www/Ext.ux.data.proxy.WebSocket/demo/server.py 8888 9999 10000
+<div class="highlight"><pre><span class="o">(</span>venv<span class="o">)</span><span class="nv">$ </span><span class="nb">cd</span> /var/www/Ext.ux.data.proxy.WebSocket/demo/ <span class="o">&amp;&amp;</span> python server.py 8888 9999 10000
 </pre></div>
 
 <p>Now, you have three websockets listening at 8888, 9999 and 10000 port on the server side!
@@ -135,12 +167,17 @@ Then, type in the address bar of your browser: <strong>http://localhost/Ext.ux.d
 
 <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
       </section>
-      <footer>
-        <p>Project maintained by <a href="https://github.com/wilk">wilk</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></small></p>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Ext.ux.data.proxy.websocket maintained by <a href="https://github.com/wilk">wilk</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
     
+
   </body>
 </html>
