@@ -1,6 +1,6 @@
 # Ext.ux.data.proxy.WebSocket
 
-ExtJS-WebSocket is an easy-to-use implementation of the ExtJS/Sencha Touch proxy, using [**Ext.ux.WebSocket**](https://github.com/wilk/ExtJS-WebSocket) (a HTML5 WebSocket wrapper built for ExtJS and Sencha Touch).
+Ext.ux.data.proxy.WebSocket is an easy-to-use implementation of the ExtJS/Sencha Touch proxy, using [**Ext.ux.WebSocket**](https://github.com/wilk/ExtJS-WebSocket) (a HTML5 WebSocket wrapper built for ExtJS and Sencha Touch).
 
 ## Requirements
   * [`Ext.ux.WebSocket`](https://github.com/wilk/ExtJS-WebSocket)
