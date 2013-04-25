@@ -1,8 +1,11 @@
-Ext.require (['*']);
-
 Ext.Loader.setConfig ({
-	enabled: true
+	enabled: true ,
+	paths: {
+		'Ext.ux': '../ux'
+	}
 });
+
+Ext.require (['Ext.ux.data.proxy.WebSocket']);
 
 Ext.onReady (function () {
 	Ext.define ('model', {
