@@ -94,7 +94,17 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 		/**
 		 * @cfg {Ext.ux.WebSocket} websocket An instance of Ext.ux.WebSocket (no needs to make a new one)
 		 */
-		websocket: null
+		websocket: null ,
+		
+		/**
+		 * @cfg {Boolean} autoReconnect If the connection is closed by the server, it tries to re-connect again. The execution interval time of this operation is specified in autoReconnectInterval
+		 */
+		autoReconnect: true ,
+		
+		/**
+		 * @cfg {Int} autoReconnectInterval Execution time slice of the autoReconnect operation, specified in milliseconds.
+		 */
+		autoReconnectInterval: 5000
 	} ,
 	
 	/**
@@ -184,14 +194,15 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 			me.ws = Ext.create ('Ext.ux.WebSocket', {
 				url: me.getUrl () ,
 				protocol: me.getProtocol () ,
-				communicationType: 'event' ,
-				autoReconnect: false
+				communicationType: 'event'
+				autoReconnect: me.getAutoReconnect () ,
+				autoReconnectInterval: me.getAutoReconnectInterval ()
 			});
 		}
 		else me.ws = me.getWebsocket ();
 		
 		// Forces the event communication
-		if (me.ws.communicationType != 'event') {
+		if (me.ws.getCommunicationType () != 'event') {
 			Ext.Error.raise ('Ext.ux.WebSocket must use event communication type (set communicationType to event)!');
 			return false;
 		}
@@ -290,7 +301,7 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 	 */
 	completeTask: function (action, event, data) {
 		var me = this ,
-			resultSet = resultSet = me.reader.read (data);
+			resultSet = me.reader.read (data);
 		
 		// Server push case: the store is get up-to-date with the incoming data
 		if (Ext.isEmpty (me.callbacks[event])) {
