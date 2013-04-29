@@ -194,7 +194,7 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 			me.ws = Ext.create ('Ext.ux.WebSocket', {
 				url: me.getUrl () ,
 				protocol: me.getProtocol () ,
-				communicationType: 'event'
+				communicationType: 'event' ,
 				autoReconnect: me.getAutoReconnect () ,
 				autoReconnectInterval: me.getAutoReconnectInterval ()
 			});
