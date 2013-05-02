@@ -190,36 +190,38 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 			return false;
 		}
 		
-		if (Ext.isEmpty (cfg.websocket)) {
-			me.ws = Ext.create ('Ext.ux.WebSocket', {
+		//if (Ext.isEmpty (cfg.websocket)) {
+		if (Ext.isEmpty (me.getWebsocket ())) {
+			me.setWebsocket (Ext.create ('Ext.ux.WebSocket', {
 				url: me.getUrl () ,
 				protocol: me.getProtocol () ,
 				communicationType: 'event' ,
 				autoReconnect: me.getAutoReconnect () ,
 				autoReconnectInterval: me.getAutoReconnectInterval ()
-			});
+			}));
 		}
-		else me.ws = me.getWebsocket ();
+		
+		var ws = me.getWebsocket ();
 		
 		// Forces the event communication
-		if (me.ws.getCommunicationType () != 'event') {
+		if (ws.getCommunicationType () != 'event') {
 			Ext.Error.raise ('Ext.ux.WebSocket must use event communication type (set communicationType to event)!');
 			return false;
 		}
 		
-		me.ws.on (me.getApi().create, function (ws, data) {
+		ws.on (me.getApi().create, function (ws, data) {
 			me.completeTask ('create', me.getApi().create, data);
 		});
 		
-		me.ws.on (me.getApi().read, function (ws, data) {
+		ws.on (me.getApi().read, function (ws, data) {
 			me.completeTask ('read', me.getApi().read, data);
 		});
 		
-		me.ws.on (me.getApi().update, function (ws, data) {
+		ws.on (me.getApi().update, function (ws, data) {
 			me.completeTask ('update', me.getApi().update, data);
 		});
 		
-		me.ws.on (me.getApi().destroy, function (ws, data) {
+		ws.on (me.getApi().destroy, function (ws, data) {
 			me.completeTask ('destroy', me.getApi().destroy, data);
 		});
 	} ,
@@ -270,7 +272,8 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 	 * @private
 	 */
 	runTask: function (action, operation, callback, scope) {
-		var me = this;
+		var me = this ,
+			ws = me.getWebsocket ();
 		
 		scope = scope || me;
 		
@@ -282,7 +285,7 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 		};
 		
 		// Treats 'read' as a string event, with no data inside
-		if (action == me.getApi().read) me.ws.send (action);
+		if (action == me.getApi().read) ws.send (action);
 		else {
 			var data = [];
 			
@@ -290,7 +293,7 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 				data.push (operation.records[i].data);
 			}
 			
-			me.ws.send (action, data);
+			ws.send (action, data);
 		}
 	} ,
 	
