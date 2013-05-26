@@ -116,6 +116,19 @@ Finally, start the server:
 (venv)$ cd /var/www/Ext.ux.data.proxy.WebSocket/demo/ && python server.py 8888 9999 10000
 ```
 
+### Python 3+
+First of all, install `Tornado`:
+
+```bash
+$ sudo apt-get install python3-tornado
+```
+
+Then, start the server:
+
+```bash
+$ python3.3 /var/www/ExtJS-WebSocket/demo/server.py 8888 9999 10000
+```
+
 Now, you have three websockets listening at 8888, 9999 and 10000 port on the server side!
 Then, type in the address bar of your browser: **http://localhost/Ext.ux.data.proxy.WebSocket/demo** and play the demo ;)
 
