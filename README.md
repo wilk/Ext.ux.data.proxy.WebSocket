@@ -89,6 +89,7 @@ With this configuration, each sync/load operation made by the store will fire th
 Now, you're ready to watch the magic in action!
 
 ## Run the demo
+### Python 2.7
 **I suggest to use [**virtualenv**](http://www.virtualenv.org) to test the demo.**
 
 First of all, you need [**virtualenv**](http://www.virtualenv.org):
@@ -116,7 +117,7 @@ Finally, start the server:
 (venv)$ cd /var/www/Ext.ux.data.proxy.WebSocket/demo/ && python server.py 8888 9999 10000
 ```
 
-### Python 3+
+### Python 3
 First of all, install `Tornado`:
 
 ```bash
