@@ -325,7 +325,7 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 			
 			delete me.callbacks[event];
 			
-			opt.resultSet = resultSet;
+			opt.setResultSet(resultSet);
 			opt.scope = fun.scope;
 			
 			opt.setCompleted ();
