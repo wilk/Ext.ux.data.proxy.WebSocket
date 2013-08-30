@@ -304,7 +304,7 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 	 */
 	completeTask: function (action, event, data) {
 		var me = this ,
-			resultSet = me.reader.read (data);
+			resultSet = me.getReader().read (data);
 		
 		// Server push case: the store is get up-to-date with the incoming data
 		if (Ext.isEmpty (me.callbacks[event])) {
@@ -325,7 +325,8 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 			
 			delete me.callbacks[event];
 			
-			opt.setResultSet(resultSet);
+			if (typeof opt.setResultSet === 'function') opt.setResultSet (resultSet);
+			else opt.resultSet = resultSet;
 			opt.scope = fun.scope;
 			
 			opt.setCompleted ();
