@@ -224,6 +224,8 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 		ws.on (me.getApi().destroy, function (ws, data) {
 			me.completeTask ('destroy', me.getApi().destroy, data);
 		});
+		
+		return me;
 	} ,
 	
 	/**
@@ -273,6 +275,7 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 	 */
 	runTask: function (action, operation, callback, scope) {
 		var me = this ,
+			data = {} ,
 			ws = me.getWebsocket ();
 		
 		scope = scope || me;
@@ -285,16 +288,49 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 		};
 		
 		// Treats 'read' as a string event, with no data inside
-		if (action == me.getApi().read) ws.send (action);
+		if (action == me.getApi().read) {
+			var sorters = operation.sorters ,
+				groupers = operation.groupers;
+			
+			// Remote sorters
+			if (sorters.length > 0) {
+				data.sort = [];
+				
+				for (var i = 0; i < sorters.length; i++) {
+					data.sort.push ({
+						property: sorters[i].property ,
+						direction: sorters[i].direction
+					});
+				}
+			}
+			
+			// Remote groupers
+			if (groupers.length > 0) {
+				data.group = [];
+				
+				for (var i = 0; i < groupers.length; i++) {
+					data.group.push ({
+						property: groupers[i].property ,
+						direction: groupers[i].direction
+					});
+				}
+			}
+			
+			// Paging params
+			data.page = operation.page;
+			data.limit = operation.limit;
+			data.start = operation.start;
+		}
+		// Create, Update, Destroy
 		else {
-			var data = [];
+			data = [];
 			
 			for (var i=0; i<operation.records.length; i++) {
 				data.push (operation.records[i].data);
 			}
-			
-			ws.send (action, data);
 		}
+		
+		ws.send (action, data);
 	} ,
 	
 	/**
