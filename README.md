@@ -5,6 +5,36 @@ Ext.ux.data.proxy.WebSocket is an easy-to-use implementation of the ExtJS/Sencha
 ## Requirements
   * [`Ext.ux.WebSocket`](https://github.com/wilk/ExtJS-WebSocket)
 
+## Install via Bower
+First of all, install [**Bower**](http://bower.io/).
+
+Then install `Ext.ux.data.proxy.WebSocket`:
+
+```bash
+$ bower install ext.ux.data.proxy.websocket
+```
+
+Now, you got the extension at the following path: *YOUR_PROJECT_PATH/bower_components/ext.ux.data.proxy.websocket/*
+
+It contains **WebSocket.js** and a minified version **WebSocket.min.js**.
+
+Let's setup the **Ext.Loader** to require the right file:
+
+```javascript
+Ext.Loader.setConfig ({
+	enabled: true ,
+	paths: {
+		'Ext.ux.data.proxy.WebSocket': 'bower_components/ext.ux.data.proxy.websocket/WebSocket.js' ,
+		// or the minified one: 'Ext.ux.data.proxy.WebSocket': 'bower_components/ext.ux.data.proxy.websocket/WebSocket.min.js' ,
+		// Require the Ext.ux.WebSocket dependency
+		'Ext.ux.WebSocket': 'bower_components/ext.ux.websocket/WebSocket.js'
+		// or the minified one: 'Ext.ux.WebSocket': 'bower_components/ext.ux.websocket/WebSocket.min.js'
+	}
+});
+
+Ext.require (['Ext.ux.data.proxy.WebSocket']);
+```
+
 ## Usage
 Load `Ext.ux.data.proxy.WebSocket` via `Ext.require`:
 
