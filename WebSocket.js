@@ -204,7 +204,7 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 		var ws = me.getWebsocket ();
 		
 		// Forces the event communication
-		if (ws.getCommunicationType () != 'event') {
+		if (ws.getCommunicationType () !== 'event') {
 			Ext.Error.raise ('Ext.ux.WebSocket must use event communication type (set communicationType to event)!');
 			return false;
 		}
@@ -276,7 +276,8 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 	runTask: function (action, operation, callback, scope) {
 		var me = this ,
 			data = {} ,
-			ws = me.getWebsocket ();
+			ws = me.getWebsocket () ,
+			i = 0;
 		
 		scope = scope || me;
 		
@@ -288,7 +289,7 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 		};
 		
 		// Treats 'read' as a string event, with no data inside
-		if (action == me.getApi().read) {
+		if (action === me.getApi().read) {
 			var sorters = operation.sorters ,
 				groupers = operation.groupers;
 			
@@ -296,7 +297,7 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 			if (sorters.length > 0) {
 				data.sort = [];
 				
-				for (var i = 0; i < sorters.length; i++) {
+				for (i = 0; i < sorters.length; i++) {
 					data.sort.push ({
 						property: sorters[i].property ,
 						direction: sorters[i].direction
@@ -308,7 +309,7 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 			if (groupers.length > 0) {
 				data.group = [];
 				
-				for (var i = 0; i < groupers.length; i++) {
+				for (i = 0; i < groupers.length; i++) {
 					data.group.push ({
 						property: groupers[i].property ,
 						direction: groupers[i].direction
@@ -325,7 +326,7 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 		else {
 			data = [];
 			
-			for (var i=0; i<operation.records.length; i++) {
+			for (i = 0; i < operation.records.length; i++) {
 				data.push (operation.records[i].data);
 			}
 		}
