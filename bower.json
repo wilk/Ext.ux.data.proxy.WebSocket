@@ -1,6 +1,6 @@
 {
   "name": "Ext.ux.data.proxy.WebSocket",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "homepage": "https://github.com/wilk/Ext.ux.data.proxy.WebSocket",
   "authors": [
     "Vincenzo (Wilk) Ferrari <wilk3ert@gmail.com>"
@@ -29,7 +29,7 @@
     "tests",
     "ux",
     "demo",
-    "Gruntfile.json"
+    "Gruntfile.js"
   ],
   "dependencies": {
     "ext.ux.websocket": "~0.0.1"
