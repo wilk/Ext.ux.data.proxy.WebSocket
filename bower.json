@@ -1,0 +1,31 @@
+{
+  "name": "Ext.ux.data.proxy.WebSocket",
+  "version": "0.0.0",
+  "homepage": "https://github.com/wilk/Ext.ux.data.proxy.WebSocket",
+  "authors": [
+    "Vincenzo (Wilk) Ferrari <wilk3ert@gmail.com>"
+  ],
+  "description": "An easy-to-use implementation of the ExtJS/Sencha Touch proxy, using HTML5 WebSocket",
+  "main": ["WebSocket.js", "WebSocket.min.js"],
+  "keywords": [
+    "sencha",
+    "extjs",
+    "senchatouch",
+    "html5",
+    "websocket",
+    "proxy"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "package.json",
+    "node_modules",
+    "bower.json",
+    "bower_components",
+    "test",
+    "tests",
+    "ux",
+    "demo",
+    "Gruntfile.json"
+  ]
+}
