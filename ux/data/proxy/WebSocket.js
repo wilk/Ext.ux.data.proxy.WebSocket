@@ -350,8 +350,8 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 				Ext.Error.raise ('Unrecognized store: check if the storeId passed into configuration is right.');
 				return false;
 			}
-			
-			store.load (resultSet.records);
+            store.loadData(resultSet.records, true);
+            store.fireEvent('load', store);
 		}
 		// Client request case: a callback function (operation) has to be called
 		else {
