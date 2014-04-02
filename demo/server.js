@@ -1,7 +1,6 @@
 'use strict';
 
 var Faker = require('Faker') ,
-    _ = require('lodash') ,
     WSS_PORT = 9001 ,
     USER_COUNTER = 10 ,
     users = [] ,
@@ -62,6 +61,7 @@ wss.on('connection', function (ws) {
             }));
         }
         else if (event === 'read') {
+            console.log(users);
             ws.send(JSON.stringify({
                 event: 'read' ,
                 data: users
@@ -69,8 +69,15 @@ wss.on('connection', function (ws) {
         }
         else if (event === 'update') {
             message.data.forEach(function (user) {
-                var index = _.find(users, {id: user.id});
-                users[index] = user;
+                var index = -1;
+                users.forEach(function (usr, idx) {
+                    if (usr.id === user.id) {
+                        index = idx;
+                        return false;
+                    }
+                });
+
+                if (index !== -1) users[index] = user;
             });
 
             wss.broadcast(JSON.stringify({
@@ -80,8 +87,15 @@ wss.on('connection', function (ws) {
         }
         else if (event === 'destroy') {
             message.data.forEach(function (user) {
-                var index = _.find(users, {id: user.id});
-                delete users[index];
+                var index = -1;
+                users.forEach(function (usr, idx) {
+                    if (usr.id === user.id) {
+                        index = idx;
+                        return false;
+                    }
+                });
+
+                if (index !== -1) users.splice(index, 1);
             });
 
             wss.broadcast(JSON.stringify({
