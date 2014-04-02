@@ -1,7 +1,7 @@
 Ext.Loader.setConfig ({
 	enabled: true ,
 	paths: {
-		'Ext.ux': '../ux'
+        'Ext.ux.data.proxy.WebSocket': '../WebSocket.js'
 	}
 });
 
@@ -14,7 +14,7 @@ Ext.onReady (function () {
 		proxy: {
 			type: 'websocket' ,
 			storeId: 'myStore',
-			url: 'ws://localhost:8888' ,
+			url: 'ws://localhost:9001' ,
 			reader: {
 				type: 'json' ,
 				root: 'user'
