@@ -120,19 +120,23 @@ Now, you're ready to watch the magic in action!
 
 ## Run the demo
 The demo has a back-end written in [**NodeJS**](http://nodejs.org/) so you have to install it first.
+Now, clone the repo locally:
+
+```bash
+$ git clone https://github.com/wilk/Ext.ux.data.proxy.WebSocket
+$ cd Ext.ux.data.proxy.WebSocket
+```
+
 Then use [**NPM**](https://www.npmjs.org/) and [**Bower**](http://bower.io/) to satisfy every dependencies:
 
 ```bash
-$ cd /path/to/Ext.ux.data.proxy.WebSocket/
-$ bower install
-$ cd /path/to/Ext.ux.data.proxy.WebSocket/demo/
-$ npm install
+$ npm install && bower install
 ```
 
 Last step, launch the server:
 
 ```bash
-node path/to/Ext.ux.data.proxy.WebSocket/demo/server
+node demo/server
 ```
 
 Now, you have a websocket listening at port 9001 on the server side!
