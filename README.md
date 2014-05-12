@@ -2,13 +2,13 @@
 
 Ext.ux.data.proxy.WebSocket is an easy-to-use implementation of the ExtJS/Sencha Touch proxy, using [**Ext.ux.WebSocket**](https://github.com/wilk/ExtJS-WebSocket) (a HTML5 WebSocket wrapper built for ExtJS and Sencha Touch).
 
-## Requirements
+## Dependencies
   * [`Ext.ux.WebSocket`](https://github.com/wilk/ExtJS-WebSocket)
 
 ## Install via Bower
 First of all, install [**Bower**](http://bower.io/).
 
-Then install `Ext.ux.data.proxy.WebSocket`:
+Then install the `Ext.ux.data.proxy.WebSocket` dependency:
 
 ```bash
 $ bower install ext.ux.data.proxy.websocket
@@ -119,48 +119,23 @@ With this configuration, each sync/load operation made by the store will fire th
 Now, you're ready to watch the magic in action!
 
 ## Run the demo
-### Python 2.7
-**I suggest to use [**virtualenv**](http://www.virtualenv.org) to test the demo.**
-
-First of all, you need [**virtualenv**](http://www.virtualenv.org):
+The demo has a back-end written in [**NodeJS**](http://nodejs.org/) so you have to install it first.
+Then use [**NPM**](https://www.npmjs.org/) and [**Bower**](http://bower.io/) to satisfy every dependencies:
 
 ```bash
-$ sudo apt-get install virtualenv
+$ cd /path/to/Ext.ux.data.proxy.WebSocket/
+$ bower install
+$ cd /path/to/Ext.ux.data.proxy.WebSocket/demo/
+$ npm install
 ```
 
-Then, make a virtual environment:
+Last step, launch the server:
 
 ```bash
-$ virtualenv venv
+node path/to/Ext.ux.data.proxy.WebSocket/demo/server
 ```
 
-And install `Tornado`:
-
-```bash
-$ . venv/bin/activate
-(venv)$ pip install tornado
-```
-
-Finally, start the server:
-
-```bash
-(venv)$ cd /var/www/Ext.ux.data.proxy.WebSocket/demo/ && python server.py 8888 9999 10000
-```
-
-### Python 3.3
-First of all, install `Tornado`:
-
-```bash
-$ sudo apt-get install python3-tornado
-```
-
-Then, start the server:
-
-```bash
-$ python3.3 /var/www/ExtJS-WebSocket/demo/server.py 8888 9999 10000
-```
-
-Now, you have three websockets listening at 8888, 9999 and 10000 port on the server side!
+Now, you have a websocket listening at port 9001 on the server side!
 Then, type in the address bar of your browser: **http://localhost/Ext.ux.data.proxy.WebSocket/demo** and play the demo ;)
 
 ## Documentation
