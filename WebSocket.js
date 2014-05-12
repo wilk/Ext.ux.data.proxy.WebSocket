@@ -352,8 +352,13 @@ Ext.define ('Ext.ux.data.proxy.WebSocket', {
 				return false;
 			}
 			
-            store.loadData (resultSet.records, true);
-            store.fireEvent ('load', store);
+			if (event === 'destroy') {
+				store.remove(resultSet.records);
+			} else {
+               			store.loadData (resultSet.records, true);
+				store.fireEvent ('load', store);
+			}
+
 		}
 		// Client request case: a callback function (operation) has to be called
 		else {
