@@ -136,7 +136,7 @@ $ npm install && bower install
 Last step, launch the server:
 
 ```bash
-node demo/server
+$ node demo/server
 ```
 
 Now, you have a websocket listening at port 9001 on the server side!
