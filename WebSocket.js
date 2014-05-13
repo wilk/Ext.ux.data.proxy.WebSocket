@@ -169,7 +169,6 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
      *         }
      *       }
      *     });
-<<<<<<< HEAD
      *
      * @return {Ext.ux.WebSocket} An instance of Ext.ux.WebSocket or null if an error occurred.
      */
