@@ -295,7 +295,7 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
                 groupers = operation.groupers;
 
             // Remote sorters
-            if (sorters.length > 0) {
+            if (sorters && sorters.length > 0) {
                 data.sort = [];
 
                 for (i = 0; i < sorters.length; i++) {
@@ -307,7 +307,7 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
             }
 
             // Remote groupers
-            if (groupers.length > 0) {
+            if (groupers && groupers.length > 0) {
                 data.group = [];
 
                 for (i = 0; i < groupers.length; i++) {
