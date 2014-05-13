@@ -325,10 +325,13 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
         }
         // Create, Update, Destroy
         else {
+            var writer = Ext.StoreManager.lookup(me.getStoreId()).getProxy().getWriter(),
+                records = operation.getRecords();
+
             data = [];
 
-            for (i = 0; i < operation.records.length; i++) {
-                data.push(operation.records[i].data);
+            for (i = 0; i < records.length; i++) {
+                data.push(writer.getRecordData(records[i]));
             }
         }
 
