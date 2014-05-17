@@ -225,6 +225,9 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
             me.completeTask('destroy', me.getApi().destroy, data);
         });
 
+        // Allows to define WebSocket proxy both into a model and a store
+        me.callParent([cfg]);
+
         return me;
     },
 
