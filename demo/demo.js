@@ -28,8 +28,6 @@ Ext.onReady(function () {
         storeId: 'myStore'
     });
 
-    //store.proxy.store = store;
-
     var grid = Ext.create('Ext.grid.Panel', {
         renderTo: Ext.getBody(),
         title: 'WebSocketed Grid',
@@ -77,9 +75,7 @@ Ext.onReady(function () {
                 text: 'Read',
                 icon: 'images/arrow-circle.png',
                 handler: function (btn) {
-                    store.load(function (records, operation, success) {
-//						console.log (records);
-                    });
+                    store.load();
                 }
             } , '-' , {
                 text: 'Update',
@@ -125,5 +121,49 @@ Ext.onReady(function () {
             xField: 'name',
             yField: 'age'
         }]
+    });
+
+    Ext.define('TreeModel', {
+        extend: 'Ext.data.Model',
+        fields: [{
+            name: 'text',
+            mapping: 'name',
+            type: 'string'
+        } , {
+            name: 'leaf',
+            type: 'boolean'
+        }]
+    });
+
+    var treeStore = Ext.create('Ext.data.TreeStore', {
+        storeId: 'myTreeStore',
+        autoLoad: true,
+        model: 'TreeModel',
+        proxy: {
+            type: 'websocket',
+            url: 'ws://localhost:9001',
+            storeId: 'myTreeStore',
+            api: {
+                create: 'user/create',
+                read: 'user/read',
+                update: 'user/update',
+                destroy: 'user/destroy'
+            },
+            reader: {
+                type: 'json',
+                root: 'children'
+            }
+        },
+        root: {
+            expanded: true
+        }
+    });
+
+    var tree = Ext.create('Ext.tree.Panel', {
+        renderTo: Ext.getBody(),
+        title: 'WebSocketed Tree Panel',
+        width: 500,
+        height: 300,
+        store: treeStore
     });
 });
