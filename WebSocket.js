@@ -355,7 +355,7 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
                 return false;
             }
 
-            if (action === me.getApi().update) {
+            if (action === 'update') {
                 for (var i = 0; i < resultSet.records.length; i++) {
                     var record = store.getById(resultSet.records[i].internalId);
 
@@ -366,7 +366,7 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
 
                 store.commitChanges();
             }
-            else if (action === me.getApi().destroy) {
+            else if (action === 'destroy') {
                 store.remove(resultSet.records);
             }
             else {
