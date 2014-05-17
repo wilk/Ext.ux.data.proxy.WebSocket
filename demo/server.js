@@ -11,7 +11,8 @@ for (var i = 0; i < USER_COUNTER; i++) {
     users.push({
         id: Faker.Helpers.randomNumber(1000000) ,
         age: Faker.Helpers.randomNumber(100) ,
-        name: Faker.Name.firstName()
+        name: Faker.Name.firstName(),
+        leaf: true
     });
 }
 console.log('WebSocketServer :: Users table initialization done!');
@@ -41,6 +42,13 @@ wss.on('connection', function (ws) {
         data: users
     }));
 
+    ws.send(JSON.stringify({
+        event: 'user/read' ,
+        data: {
+            children: users
+        }
+    }));
+
     ws.on('message', function (json) {
         var message = JSON.parse(json) ,
             event = message.event;
@@ -61,7 +69,6 @@ wss.on('connection', function (ws) {
             }));
         }
         else if (event === 'read') {
-            console.log(users);
             ws.send(JSON.stringify({
                 event: 'read' ,
                 data: users
