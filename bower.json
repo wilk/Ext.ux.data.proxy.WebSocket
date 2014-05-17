@@ -1,6 +1,6 @@
 {
   "name": "Ext.ux.data.proxy.WebSocket",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "homepage": "https://github.com/wilk/Ext.ux.data.proxy.WebSocket",
   "authors": [
     "Vincenzo (Wilk) Ferrari <wilk3ert@gmail.com>"
