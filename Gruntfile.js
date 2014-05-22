@@ -5,7 +5,7 @@ module.exports = function (grunt) {
 		uglify: {
 			dist: {
 				files: {
-					'WebSocket.min.js': 'WebSocket.js'
+					'WebSocketProxy.min.js': 'WebSocketProxy.js'
 				}
 			}
 		} ,
@@ -22,7 +22,7 @@ module.exports = function (grunt) {
 					smarttabs: true ,
 					loopfunc: true
 				} ,
-				src: ['WebSocket.js']
+				src: ['WebSocketProxy.js']
 			}
 		}
 	});

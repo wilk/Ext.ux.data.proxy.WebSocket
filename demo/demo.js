@@ -2,7 +2,7 @@ Ext.Loader.setConfig({
     enabled: true,
     paths: {
         'Ext.ux.WebSocket': '../bower_components/ext.ux.websocket/WebSocket.js',
-        'Ext.ux.data.proxy.WebSocket': '../WebSocket.js'
+        'Ext.ux.data.proxy.WebSocket': '../WebSocketProxy.js'
     }
 });
 

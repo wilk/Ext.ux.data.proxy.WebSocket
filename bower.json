@@ -7,7 +7,7 @@
   ],
   "description": "An easy-to-use implementation of the ExtJS/Sencha Touch proxy, using HTML5 WebSocket",
   "main": [
-    "WebSocket.js"
+    "WebSocketProxy.js"
   ],
   "keywords": [
     "sencha",

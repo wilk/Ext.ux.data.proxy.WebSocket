@@ -2,7 +2,7 @@
   "name": "Ext.ux.data.proxy.WebSocket",
   "version": "0.0.0",
   "description": "An easy-to-use implementation of the ExtJS/Sencha Touch proxy, using HTML5 WebSocket",
-  "main": "WebSocket.js",
+  "main": "WebSocketProxy.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -26,10 +26,36 @@
   "homepage": "https://github.com/wilk/Ext.ux.data.proxy.WebSocket",
   "devDependencies": {
     "Faker": "~0.7.0",
-    "ws": "~0.4.31",
-    "load-grunt-tasks": "~0.2.1",
-    "grunt-contrib-uglify": "~0.3.0",
+    "connect-livereload": "^0.4.0",
     "grunt": "~0.4.2",
-    "grunt-contrib-jshint": "~0.8.0"
+    "grunt-bower-verify": "^2.0.0",
+    "grunt-contrib-jshint": "~0.8.0",
+    "grunt-contrib-uglify": "~0.3.0",
+    "load-grunt-tasks": "~0.2.1",
+    "ws": "~0.4.31"
+  },
+  "architect": {
+    "compatFrameworks": [
+      "ext42"
+    ],
+    "classes": [
+      {
+        "definition": "WebSocketProxy.Definition.js",
+        "className": "Ext.ux.data.proxy.WebSocket",
+        "js": [
+          "WebSocketProxy.js"
+        ],
+        "css": []
+      },
+      {
+        "definition": "WebSocket.Definition.js",
+        "className": "Ext.ux.WebSocket",
+        "js": [
+          "WebSocketManager.js",
+          "WebSocket.js"
+        ],
+        "css": []
+      }
+    ]
   }
 }
