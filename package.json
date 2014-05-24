@@ -31,5 +31,20 @@
     "grunt-contrib-uglify": "~0.3.0",
     "grunt": "~0.4.2",
     "grunt-contrib-jshint": "~0.8.0"
+  },
+  "architect": {
+    "compatFrameworks": [
+      "ext42"
+    ],
+    "classes": [{
+      "definition": "WebSocketProxy.Definition.js",
+      "className": "Ext.ux.data.proxy.WebSocket",
+      "js": [
+        "WebSocket.js"
+      ],
+      "css": [
+      ]
+    }],
+    "requires": ["Ext.ux.WebSocket"]
   }
 }
