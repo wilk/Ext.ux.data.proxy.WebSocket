@@ -104,7 +104,12 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
         /**
          * @cfg {Int} autoReconnectInterval Execution time slice of the autoReconnect operation, specified in milliseconds.
          */
-        autoReconnectInterval: 5000
+        autoReconnectInterval: 5000,
+
+        /**
+         * @cfg {Boolean} keepUnsentMessages Keep unsent messages and try to send them back after the connection is open again.
+         */
+        keepUnsentMessages: true
     },
 
     /**
@@ -197,7 +202,8 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
                 protocol: me.getProtocol(),
                 communicationType: 'event',
                 autoReconnect: me.getAutoReconnect(),
-                autoReconnectInterval: me.getAutoReconnectInterval()
+                autoReconnectInterval: me.getAutoReconnectInterval(),
+                keepUnsentMessages: me.getKeepUnsentMessages()
             }));
         }
 
