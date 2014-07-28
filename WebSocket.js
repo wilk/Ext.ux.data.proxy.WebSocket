@@ -243,8 +243,8 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
      * The use of this method is discouraged: it's invoked by the store with sync/load operations.
      * Use api config instead
      */
-    create: function (operation, callback, scope) {
-        this.runTask(this.getApi().create, operation, callback, scope);
+    create: function (operation) {
+        this.runTask(this.getApi().create, operation);
     },
 
     /**
@@ -253,8 +253,8 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
      * The use of this method is discouraged: it's invoked by the store with sync/load operations.
      * Use api config instead
      */
-    read: function (operation, callback, scope) {
-        this.runTask(this.getApi().read, operation, callback, scope);
+    read: function (operation) {
+        this.runTask(this.getApi().read, operation);
     },
 
     /**
@@ -263,8 +263,8 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
      * The use of this method is discouraged: it's invoked by the store with sync/load operations.
      * Use api config instead
      */
-    update: function (operation, callback, scope) {
-        this.runTask(this.getApi().update, operation, callback, scope);
+    update: function (operation) {
+        this.runTask(this.getApi().update, operation);
     },
 
     /**
@@ -273,8 +273,8 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
      * The use of this method is discouraged: it's invoked by the store with sync/load operations.
      * Use api config instead
      */
-    destroy: function (operation, callback, scope) {
-        this.runTask(this.getApi().destroy, operation, callback, scope);
+    destroy: function (operation) {
+        this.runTask(this.getApi().destroy, operation);
     },
 
     /**
@@ -282,19 +282,18 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
      * Starts a new operation (pull)
      * @private
      */
-    runTask: function (action, operation, callback, scope) {
+    runTask: function (action, operation) {
         var me = this ,
             data = {} ,
             ws = me.getWebsocket() ,
-            i = 0;
-
-        scope = scope || me;
+            i = 0,
+            scope = operation.getInternalScope() || me;
 
         // Callbacks store
         me.callbacks[action] = {
             operation: operation,
-            callback: callback,
-            scope: scope
+            callback:  operation.getInternalCallback() || Ext.emptyFn,
+            scope: operation.getInternalScope() || me
         };
 
         // Treats 'read' as a string event, with no data inside
@@ -386,8 +385,7 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
         // Client request case: a callback function (operation) has to be called
         else {
             var fun = me.callbacks[event] ,
-                opt = fun.operation ,
-                records = opt.records || data;
+                opt = fun.operation;
 
             delete me.callbacks[event];
 
