@@ -39,13 +39,17 @@ wss.on('connection', function (ws) {
 
     ws.send(JSON.stringify({
         event: 'read' ,
-        data: users
+        data: {
+            data: users,
+            success: true
+        }
     }));
 
     ws.send(JSON.stringify({
         event: 'user/read' ,
         data: {
-            children: users
+            data: users,
+            success: true
         }
     }));
 
@@ -65,13 +69,33 @@ wss.on('connection', function (ws) {
 
             wss.broadcast(JSON.stringify({
                 event: 'create' ,
-                data: message.data
+                data: {
+                    data: message.data,
+                    success: true
+                }
+            }));
+            wss.broadcast(JSON.stringify({
+                event: 'user/create' ,
+                data: {
+                    data: message.data,
+                    success: true
+                }
             }));
         }
         else if (event === 'read') {
             ws.send(JSON.stringify({
                 event: 'read' ,
-                data: users
+                data: {
+                    data: users,
+                    success: true
+                }
+            }));
+            ws.send(JSON.stringify({
+                event: 'user/read' ,
+                data: {
+                    data: users,
+                    success: true
+                }
             }));
         }
         else if (event === 'update') {
@@ -89,7 +113,17 @@ wss.on('connection', function (ws) {
 
             wss.broadcast(JSON.stringify({
                 event: 'update' ,
-                data: message.data
+                data: {
+                    data: message.data,
+                    success: true
+                }
+            }));
+            wss.broadcast(JSON.stringify({
+                event: 'user/update' ,
+                data: {
+                    data: message.data,
+                    success: true
+                }
             }));
         }
         else if (event === 'destroy') {
@@ -107,7 +141,17 @@ wss.on('connection', function (ws) {
 
             wss.broadcast(JSON.stringify({
                 event: 'destroy' ,
-                data: message.data
+                data: {
+                    data: message.data,
+                    success: true
+                }
+            }));
+            wss.broadcast(JSON.stringify({
+                event: 'user/destroy' ,
+                data: {
+                    data: message.data,
+                    success: true
+                }
             }));
         }
     });

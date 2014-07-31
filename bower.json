@@ -31,6 +31,6 @@
     "Gruntfile.js"
   ],
   "dependencies": {
-    "ext.ux.websocket": "~0.0.4"
+    "ext.ux.websocket": "~1.0.0"
   }
 }
