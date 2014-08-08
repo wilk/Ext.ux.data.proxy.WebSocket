@@ -21,10 +21,10 @@ Then install the `Ext.ux.data.proxy.WebSocket` dependency (version v1.x.x for Ex
 $ bower install ext.ux.data.proxy.websocket
 ```
 
-Or install the `Ext.ux.data.proxy.WebSocket` dependency (version v0.0.5 for ExtJS 4 & Sencha Touch 2):
+Or install the `Ext.ux.data.proxy.WebSocket` dependency (version v0.0.7 for ExtJS 4 & Sencha Touch 2):
 
 ```bash
-$ bower install ext.ux.data.proxy.websocket
+$ bower install ext.ux.data.proxy.websocket#0.0.7
 ```
 
 Now, you got the extension at the following path: *YOUR_PROJECT_PATH/bower_components/ext.ux.data.proxy.websocket/*
