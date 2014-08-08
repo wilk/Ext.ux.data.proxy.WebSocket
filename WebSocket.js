@@ -268,12 +268,12 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
     },
 
     /**
-     * @method destroy
+     * @method erase
      * Starts a new DESTROY operation (pull)
      * The use of this method is discouraged: it's invoked by the store with sync/load operations.
      * Use api config instead
      */
-    destroy: function (operation) {
+    erase: function (operation) {
         this.runTask(this.getApi().destroy, operation);
     },
 
@@ -286,14 +286,11 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
         var me = this ,
             data = {} ,
             ws = me.getWebsocket() ,
-            i = 0,
-            scope = operation.getInternalScope() || me;
+            i = 0;
 
         // Callbacks store
         me.callbacks[action] = {
-            operation: operation,
-            callback:  operation.getInternalCallback() || Ext.emptyFn,
-            scope: operation.getInternalScope() || me
+            operation: operation
         };
 
         // Treats 'read' as a string event, with no data inside
@@ -355,7 +352,7 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
             resultSet = me.getReader().read(data);
 
         // Server push case: the store is get up-to-date with the incoming data
-        if (Ext.isEmpty(me.callbacks[event])) {
+        if (!me.callbacks[event]) {
             var store = Ext.StoreManager.lookup(me.getStoreId());
 
             if (typeof store === 'undefined') {
@@ -365,7 +362,7 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
 
             if (action === 'update') {
                 for (var i = 0; i < resultSet.records.length; i++) {
-                    var record = store.getById(resultSet.records[i].internalId);
+                    var record = store.getById(resultSet.records[i].getId());
 
                     if (record) {
                         record.set(resultSet.records[i].data);
@@ -375,7 +372,11 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
                 store.commitChanges();
             }
             else if (action === 'destroy') {
-                store.remove(resultSet.records);
+                Ext.each(resultSet.records, function (record) {
+                    store.remove(record);
+                });
+
+                store.commitChanges();
             }
             else {
                 store.loadData(resultSet.records, true);
@@ -384,19 +385,15 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
         }
         // Client request case: a callback function (operation) has to be called
         else {
-            var fun = me.callbacks[event] ,
-                opt = fun.operation;
+            var opt = me.callbacks[event].operation ,
+                records = opt.records || data;
 
             delete me.callbacks[event];
 
             if (typeof opt.setResultSet === 'function') opt.setResultSet(resultSet);
             else opt.resultSet = resultSet;
-            opt.scope = fun.scope;
 
-            opt.setCompleted();
-            opt.setSuccessful();
-
-            fun.callback.apply(fun.scope, [opt]);
+            opt.setSuccessful(true);
         }
     }
 });
