@@ -5,10 +5,23 @@ Ext.ux.data.proxy.WebSocket is an easy-to-use implementation of the ExtJS/Sencha
 ## Dependencies
   * [`Ext.ux.WebSocket`](https://github.com/wilk/ExtJS-WebSocket)
 
+## ExtJS 5
+The new version of ExtJS 5 has requested to make a new major version of `Ext.ux.data.proxy.WebSocket`.
+Now, this new major version **v1.0.0** is located on the master branch.
+
+## ExtJS 4 & Sencha Touch 2
+It's possible to work either with ExtJS 4 and Sencha Touch 2 with previous version **v0.0.7**
+
 ## Install via Bower
 First of all, install [**Bower**](http://bower.io/).
 
-Then install the `Ext.ux.data.proxy.WebSocket` dependency:
+Then install the `Ext.ux.data.proxy.WebSocket` dependency (version v1.x.x for ExtJS 5):
+
+```bash
+$ bower install ext.ux.data.proxy.websocket
+```
+
+Or install the `Ext.ux.data.proxy.WebSocket` dependency (version v0.0.5 for ExtJS 4 & Sencha Touch 2):
 
 ```bash
 $ bower install ext.ux.data.proxy.websocket
