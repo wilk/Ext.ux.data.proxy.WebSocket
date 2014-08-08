@@ -295,8 +295,8 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
 
         // Treats 'read' as a string event, with no data inside
         if (action === me.getApi().read) {
-            var sorters = operation.sorters ,
-                groupers = operation.groupers;
+            var sorters = operation._sorters ,
+                groupers = operation._groupers;
 
             // Remote sorters
             if (sorters && sorters.length > 0) {
@@ -304,8 +304,8 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
 
                 for (i = 0; i < sorters.length; i++) {
                     data.sort.push({
-                        property: sorters[i].property,
-                        direction: sorters[i].direction
+                        property: sorters[i]._property,
+                        direction: sorters[i]._direction
                     });
                 }
             }
@@ -316,16 +316,16 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
 
                 for (i = 0; i < groupers.length; i++) {
                     data.group.push({
-                        property: groupers[i].property,
-                        direction: groupers[i].direction
+                        property: groupers[i]._property,
+                        direction: groupers[i]._direction
                     });
                 }
             }
 
             // Paging params
-            data.page = operation.page;
-            data.limit = operation.limit;
-            data.start = operation.start;
+            data.page = operation._page;
+            data.limit = operation._limit;
+            data.start = operation._start;
         }
         // Create, Update, Destroy
         else {
