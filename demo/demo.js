@@ -18,7 +18,11 @@ Ext.onReady(function () {
             url: 'ws://localhost:9001',
             reader: {
                 type: 'json',
-                root: 'user'
+                rootProperty: 'data'
+            },
+            writer: {
+                type: 'json',
+                writeAllFields: true
             }
         }
     });
@@ -41,9 +45,14 @@ Ext.onReady(function () {
             clicksToEdit: 1
         })],
 
-        columns: [{
+        columns: [
+            /*{
+            // rownumberer doesn't work in 5.0.0:
+            // EXTJS-13759 Rownumberer/Action Column causes error when updating row.
+            // Fixed in Ext JS 5.0.1.
             xtype: 'rownumberer'
-        } , {
+        } , */
+            {
             text: 'ID',
             dataIndex: 'id',
             hidden: true
@@ -137,7 +146,7 @@ Ext.onReady(function () {
 
     var treeStore = Ext.create('Ext.data.TreeStore', {
         storeId: 'myTreeStore',
-        autoLoad: true,
+        autoLoad: false,
         model: 'TreeModel',
         proxy: {
             type: 'websocket',
@@ -151,7 +160,7 @@ Ext.onReady(function () {
             },
             reader: {
                 type: 'json',
-                root: 'children'
+                rootProperty: 'data'
             }
         },
         root: {
