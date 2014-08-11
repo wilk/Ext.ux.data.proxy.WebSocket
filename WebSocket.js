@@ -56,7 +56,7 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
     extend: 'Ext.data.proxy.Proxy',
     alias: 'proxy.websocket',
 
-    requires: ['Ext.ux.WebSocket'],
+    requires: ['Ext.ux.WebSocket','Ext.ux.WebSocketManager'],
 
     /**
      * @property {Object} callbacks
@@ -195,16 +195,22 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
             return false;
         }
 
-        //if (Ext.isEmpty (cfg.websocket)) {
         if (Ext.isEmpty(me.getWebsocket())) {
-            me.setWebsocket(Ext.create('Ext.ux.WebSocket', {
+        // use websocket manager to use an existing socket if they use the same url.
+        var s = Ext.ux.WebSocketManager.get(me.getUrl());
+        if (!s){
+            s = Ext.create('Ext.ux.WebSocket', {
                 url: me.getUrl(),
                 protocol: me.getProtocol(),
                 communicationType: 'event',
                 autoReconnect: me.getAutoReconnect(),
                 autoReconnectInterval: me.getAutoReconnectInterval(),
                 keepUnsentMessages: me.getKeepUnsentMessages()
-            }));
+                });
+                Ext.ux.WebSocketManager.register(s);
+            }
+			
+            me.setWebsocket(s);
         }
 
         var ws = me.getWebsocket();
