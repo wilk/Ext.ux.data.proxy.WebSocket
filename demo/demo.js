@@ -46,12 +46,9 @@ Ext.onReady(function () {
         })],
 
         columns: [
-            /*{
-            // rownumberer doesn't work in 5.0.0:
-            // EXTJS-13759 Rownumberer/Action Column causes error when updating row.
-            // Fixed in Ext JS 5.0.1.
+            {
             xtype: 'rownumberer'
-        } , */
+        } ,
             {
             text: 'ID',
             dataIndex: 'id',
@@ -114,18 +111,18 @@ Ext.onReady(function () {
         store: store,
 
         axes: [{
-            type: 'Category',
+            type: 'category',
             position: 'bottom',
             fields: ['name']
         } , {
-            type: 'Numeric',
+            type: 'numeric',
             position: 'left',
             minimum: 0,
             fields: ['age']
         }],
 
         series: [{
-            type: 'column',
+            type: 'bar',
             axis: 'left',
             xField: 'name',
             yField: 'age'
