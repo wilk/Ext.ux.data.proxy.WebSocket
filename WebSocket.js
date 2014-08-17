@@ -295,8 +295,16 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
 
         // Treats 'read' as a string event, with no data inside
         if (action === me.getApi().read) {
-            var sorters = operation._sorters ,
+            var extraParams = operation._proxy.extraParams,
+                sorters = operation._sorters ,
                 groupers = operation._groupers;
+
+            // extraParams
+            for (var key in extraParams) {
+                if (extraParams.hasOwnProperty(key)) {
+                    data[key] = extraParams[key];
+                }
+            }
 
             // Remote sorters
             if (sorters && sorters.length > 0) {
