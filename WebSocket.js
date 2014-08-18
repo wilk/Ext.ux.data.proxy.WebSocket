@@ -296,6 +296,7 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
         // Treats 'read' as a string event, with no data inside
         if (action === me.getApi().read) {
             var extraParams = operation._proxy.extraParams,
+				queryParams = operation._params,
                 sorters = operation._sorters ,
                 groupers = operation._groupers;
 
@@ -303,6 +304,13 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
             for (var key in extraParams) {
                 if (extraParams.hasOwnProperty(key)) {
                     data[key] = extraParams[key];
+                }
+            }
+
+            // Query parameter if read request come from combo field
+            for (var key in queryParams){
+                if (queryParams.hasOwnProperty(key)) {
+                    data[key] = queryParams[key];
                 }
             }
 
