@@ -296,7 +296,7 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
         // Treats 'read' as a string event, with no data inside
         if (action === me.getApi().read) {
             var extraParams = operation._proxy.extraParams,
-				queryParams = operation._params,
+		queryParams = operation._params,
                 sorters = operation._sorters ,
                 groupers = operation._groupers;
 
