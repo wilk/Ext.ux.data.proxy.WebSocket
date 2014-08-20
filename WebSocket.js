@@ -87,6 +87,85 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
         url: '',
 
         /**
+         * @cfg {String} [pageParam="page"]
+         * The name of the 'page' parameter to send in a request. Defaults to 'page'. Set this to `''` if you don't
+         * want to send a page parameter.
+         */
+        pageParam: 'page',
+
+        /**
+         * @cfg {String} [startParam="start"]
+         * The name of the 'start' parameter to send in a request. Defaults to 'start'. Set this to `''` if you don't
+         * want to send a start parameter.
+         */
+        startParam: 'start',
+
+        /**
+         * @cfg {String} [limitParam="limit"]
+         * The name of the 'limit' parameter to send in a request. Defaults to 'limit'. Set this to `''` if you don't
+         * want to send a limit parameter.
+         */
+        limitParam: 'limit',
+
+        /**
+         * @cfg {String} [groupParam="group"]
+         * The name of the 'group' parameter to send in a request. Defaults to 'group'. Set this to `''` if you don't
+         * want to send a group parameter.
+         */
+        groupParam: 'group',
+
+        /**
+         * @cfg {String} [groupDirectionParam="groupDir"]
+         * The name of the direction parameter to send in a request. **This is only used when simpleGroupMode is set to
+         * true.**
+         */
+        groupDirectionParam: 'groupDir',
+
+        /**
+         * @cfg {String} [sortParam="sort"]
+         * The name of the 'sort' parameter to send in a request. Defaults to 'sort'. Set this to `''` if you don't
+         * want to send a sort parameter.
+         */
+        sortParam: 'sort',
+
+        /**
+         * @cfg {String} [filterParam="filter"]
+         * The name of the 'filter' parameter to send in a request. Defaults to 'filter'. Set this to `''` if you don't
+         * want to send a filter parameter.
+         */
+        filterParam: 'filter',
+
+        /**
+         * @cfg {String} [directionParam="dir"]
+         * The name of the direction parameter to send in a request. **This is only used when simpleSortMode is set to
+         * true.**
+         */
+        directionParam: 'dir',
+
+        /**
+         * @cfg {Boolean} [simpleSortMode=false]
+         * Enabling simpleSortMode in conjunction with remoteSort will only send one sort property and a direction when a
+         * remote sort is requested. The {@link #directionParam} and {@link #sortParam} will be sent with the property name
+         * and either 'ASC' or 'DESC'.
+         */
+        simpleSortMode: false,
+
+        /**
+         * @cfg {Boolean} [simpleGroupMode=false]
+         * Enabling simpleGroupMode in conjunction with remoteGroup will only send one group property and a direction when a
+         * remote group is requested. The {@link #groupDirectionParam} and {@link #groupParam} will be sent with the property name and either 'ASC'
+         * or 'DESC'.
+         */
+        simpleGroupMode: false,
+
+        /**
+         * @cfg {Object} extraParams
+         * Extra parameters that will be included on every request. Individual requests with params of the same name
+         * will override these params when they are in conflict.
+         */
+        extraParams: {},
+
+        /**
          * @cfg {String} protocol The protocol to use in the connection
          */
         protocol: null,
@@ -238,6 +317,113 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
     },
 
     /**
+     * Encodes the array of {@link Ext.util.Sorter} objects into a string to be sent in the request url. By default,
+     * this simply JSON-encodes the sorter data
+     * @param {Ext.util.Sorter[]} sorters The array of {@link Ext.util.Sorter Sorter} objects
+     * @param {Boolean} [preventArray=false] Prevents the items from being output as an array.
+     * @return {String} The encoded sorters
+     */
+    encodeSorters: function (sorters, preventArray) {
+        var out = [],
+            length = sorters.length,
+            i;
+
+        for (i = 0; i < length; i++) {
+            out[i] = sorters[i].serialize();
+        }
+
+        return Ext.encode(preventArray ? out[0] : out);
+    },
+
+    /**
+     * Encodes the array of {@link Ext.util.Filter} objects into a string to be sent in the request url. By default,
+     * this simply JSON-encodes the filter data
+     * @param {Ext.util.Filter[]} filters The array of {@link Ext.util.Filter Filter} objects
+     * @return {String} The encoded filters
+     */
+    encodeFilters: function (filters) {
+        var out = [],
+            length = filters.length,
+            i, op;
+
+        for (i = 0; i < length; i++) {
+            out[i] = filters[i].serialize();
+        }
+
+        return Ext.encode(out);
+    },
+
+    /**
+     * @private
+     * Copy any sorters, filters etc into the params so they can be sent over the wire
+     */
+    getParams: function (operation) {
+        var me = this,
+            params = {},
+            grouper = operation.getGrouper(),
+            sorters = operation.getSorters(),
+            filters = operation.getFilters(),
+            page = operation.getPage(),
+            start = operation.getStart(),
+            limit = operation.getLimit(),
+            simpleSortMode = me.getSimpleSortMode(),
+            simpleGroupMode = me.getSimpleGroupMode(),
+            pageParam = me.getPageParam(),
+            startParam = me.getStartParam(),
+            limitParam = me.getLimitParam(),
+            groupParam = me.getGroupParam(),
+            groupDirectionParam = me.getGroupDirectionParam(),
+            sortParam = me.getSortParam(),
+            filterParam = me.getFilterParam(),
+            directionParam = me.getDirectionParam(),
+            hasGroups, index;
+
+        if (pageParam && page) {
+            params[pageParam] = page;
+        }
+
+        if (startParam && (start || start === 0)) {
+            params[startParam] = start;
+        }
+
+        if (limitParam && limit) {
+            params[limitParam] = limit;
+        }
+
+        hasGroups = groupParam && grouper;
+        if (hasGroups) {
+            // Grouper is a subclass of sorter, so we can just use the sorter method
+            if (simpleGroupMode) {
+                params[groupParam] = grouper.getProperty();
+                params[groupDirectionParam] = grouper.getDirection();
+            } else {
+                params[groupParam] = me.encodeSorters([grouper], true);
+            }
+        }
+
+        if (sortParam && sorters && sorters.length > 0) {
+            if (simpleSortMode) {
+                index = 0;
+                // Group will be included in sorters, so grab the next one
+                if (sorters.length > 1 && hasGroups) {
+                    index = 1;
+                }
+                params[sortParam] = sorters[index].getProperty();
+                params[directionParam] = sorters[index].getDirection();
+            } else {
+                params[sortParam] = me.encodeSorters(sorters);
+            }
+
+        }
+
+        if (filterParam && filters && filters.length > 0) {
+            params[filterParam] = me.encodeFilters(filters);
+        }
+
+        return params;
+    },
+
+    /**
      * @method create
      * Starts a new CREATE operation (pull)
      * The use of this method is discouraged: it's invoked by the store with sync/load operations.
@@ -295,53 +481,12 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
 
         // Treats 'read' as a string event, with no data inside
         if (action === me.getApi().read) {
-            var extraParams = operation._proxy.extraParams,
-		queryParams = operation._params,
-                sorters = operation._sorters ,
-                groupers = operation._groupers;
+            var initialParams = Ext.apply({}, operation.getParams());
 
-            // extraParams
-            for (var key in extraParams) {
-                if (extraParams.hasOwnProperty(key)) {
-                    data[key] = extraParams[key];
-                }
-            }
+            data = Ext.applyIf(initialParams, me.getExtraParams() || {});
 
-            // Query parameter if read request come from combo field
-            for (var key in queryParams){
-                if (queryParams.hasOwnProperty(key)) {
-                    data[key] = queryParams[key];
-                }
-            }
-
-            // Remote sorters
-            if (sorters && sorters.length > 0) {
-                data.sort = [];
-
-                for (i = 0; i < sorters.length; i++) {
-                    data.sort.push({
-                        property: sorters[i]._property,
-                        direction: sorters[i]._direction
-                    });
-                }
-            }
-
-            // Remote groupers
-            if (groupers && groupers.length > 0) {
-                data.group = [];
-
-                for (i = 0; i < groupers.length; i++) {
-                    data.group.push({
-                        property: groupers[i]._property,
-                        direction: groupers[i]._direction
-                    });
-                }
-            }
-
-            // Paging params
-            data.page = operation._page;
-            data.limit = operation._limit;
-            data.start = operation._start;
+            // copy any sorters, filters etc into the params so they can be sent over the wire
+            Ext.applyIf(data, me.getParams(operation));
         }
         // Create, Update, Destroy
         else {
