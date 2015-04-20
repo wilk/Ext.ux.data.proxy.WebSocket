@@ -98,6 +98,24 @@ wss.on('connection', function (ws) {
                 }
             }));
         }
+        else if (event === 'buffered/read'){
+            var dat = [];
+            for (var t=0; t<message.data.limit; t++){
+                dat.push({
+                    id: Faker.Helpers.randomNumber(1000000),
+                    name: Faker.Name.firstName() + " " + Faker.Name.lastName()
+                });
+            }
+            ws.send(JSON.stringify({
+                event: event,
+                data: {
+                    callback: message.data.callback,
+                    data: dat,
+                    totalCount: "10000",
+                    success: true
+                }
+            }));
+        }
         else if (event === 'update') {
             message.data.forEach(function (user) {
                 var index = -1;

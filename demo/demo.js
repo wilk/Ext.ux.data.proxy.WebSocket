@@ -172,4 +172,46 @@ Ext.onReady(function () {
         height: 300,
         store: treeStore
     });
+
+    var bufferedStore = Ext.create('Ext.data.Store',{
+        storeId: 'myBufferedStore',
+        autoLoad: true,
+        buffered: true,
+        pageSize: 50,
+        loadingBufferZone: 150,
+        trailingBufferZone: 150,
+        remoteSort: true,
+        remoteFilter: true,
+        fields:['id','name'],
+        proxy: {
+            type: 'websocket',
+            url: 'ws://localhost:9001',
+            storeId: 'myBufferedStore',
+            api: {
+                read: 'buffered/read'
+            },
+            reader: {
+                type: 'json',
+                rootProperty: 'data',
+                totalProperty: 'totalCount'
+            }
+        }
+    });
+
+    var bufferedGrid = Ext.create('Ext.grid.GridPanel',{
+        renderTo: Ext.getBody(),
+        store: bufferedStore,
+        title: 'WebSocketed Infinite Scrolling',
+        width: 500,
+        height: 300,
+        columns: [{
+           dataIndex: 'name',
+           header: 'name',
+           flex: 1
+        }],
+        viewConfig: {
+            loadMask: false,
+            reserveScrollbar: true
+        }
+    });
 });
