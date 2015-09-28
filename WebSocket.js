@@ -58,13 +58,6 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
 
     requires: ['Ext.ux.WebSocket'],
 
-    /**
-     * @property {Object} callbacks
-     * @private
-     * Callbacks stack
-     */
-    callbacks: {},
-
     config: {
         /**
          * @cfg {String} storeId (required) Id of the store associated
@@ -179,6 +172,8 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
      */
     constructor: function (cfg) {
         var me = this;
+
+        me.callbacks = Ext.apply(cfg.callbacks || {}, {});
 
         // Requires a configuration
         if (Ext.isEmpty(cfg)) {
