@@ -556,5 +556,21 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
 
             opt.setSuccessful(true);
         }
-    }
+    },
+    destroy: function () {
+        /**
+         *  @author Marco Sulla (marcosullaroma@gmail.com)
+         *  @date Feb 10, 2016
+         */
+        
+        var self = this;
+        
+        var ws = self.getWebsocket();
+        
+        ws.onclose = function (e) {
+            self.callParent(arguments);
+        };
+        
+        ws.close();
+    },
 });
