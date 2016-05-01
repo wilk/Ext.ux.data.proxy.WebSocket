@@ -9,7 +9,7 @@ Ext.ux.data.proxy.WebSocket is an easy-to-use implementation of the ExtJS/Sencha
 
 ## ExtJS 5
 The new version of ExtJS 5 has requested to make a new major version of `Ext.ux.data.proxy.WebSocket`.
-Now, this new major version **v1.0.0** is located on the master branch.
+Now, this new major version **v1.0.2** is located on the master branch.
 
 ## ExtJS 4 & Sencha Touch 2
 It's possible to work either with ExtJS 4 and Sencha Touch 2 with previous version **v0.0.7**
@@ -167,7 +167,7 @@ It will make the documentation into docs dir and it will be visible at: http://l
 ## License
 The MIT License (MIT)
 
-Copyright (c) 2013 Vincenzo Ferrari <wilk3ert@gmail.com>
+Copyright (c) 2015 Vincenzo Ferrari <wilk3ert@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
