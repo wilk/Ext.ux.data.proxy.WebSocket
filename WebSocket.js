@@ -188,7 +188,12 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
         /**
          * @cfg {Boolean} keepUnsentMessages Keep unsent messages and try to send them back after the connection is open again.
          */
-        keepUnsentMessages: true
+        keepUnsentMessages: true,
+        
+        /**
+         * Callback counter for buffered stores.
+         */
+        callbackCounter: 1
     },
 
     /**
@@ -441,6 +446,9 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
      */
     read: function (operation) {
         this.runTask(this.getApi().read, operation);
+        
+        // return value required for buffered store.
+        return 1;
     },
 
     /**
@@ -472,10 +480,18 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
         var me = this ,
             data = {} ,
             ws = me.getWebsocket() ,
-            i = 0;
+            i = 0, callback;
+
+        // buffered store.
+		if (operation._limit){
+	    	callback = action + "_" + this.callbackCounter;
+	    	this.callbackCounter ++;    
+		} else {
+		    callback = action;
+		}
 
         // Callbacks store
-        me.callbacks[action] = {
+        me.callbacks[callback] = {
             operation: operation
         };
 
@@ -487,6 +503,10 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
 
             // copy any sorters, filters etc into the params so they can be sent over the wire
             Ext.applyIf(data, me.getParams(operation));
+            
+            // Copy read operation callback name to match.
+            if (operation._limit)
+	            Ext.apply(data, {"callback": callback});
         }
         // Create, Update, Destroy
         else {
@@ -508,12 +528,20 @@ Ext.define('Ext.ux.data.proxy.WebSocket', {
      * Completes a pending operation (push/pull)
      * @private
      */
-    completeTask: function (action, event, data) {
+    completeTask: function (action, e, data) {
         var me = this ,
+        	event,
             resultSet = me.getReader().read(data);
 
+        // Data for buffered stores should have a callback parameter matching the request because the buffered store can do multiple reads at the same time.
+        if (data.callback){
+            event = data.callback;
+        } else {
+            event = e;
+        }
+
         // Server push case: the store is get up-to-date with the incoming data
-        if (!me.callbacks[event]) {
+        if (!data.callback || !me.callbacks[event]){
             var store = Ext.StoreManager.lookup(me.getStoreId());
 
             if (typeof store === 'undefined') {
